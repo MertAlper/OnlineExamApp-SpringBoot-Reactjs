@@ -15,7 +15,7 @@ import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:db-credentials.properties")
+@PropertySource("classpath:db.properties")
 public class DatabaseConfig {
 
     @Autowired
