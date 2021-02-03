@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -20,7 +21,7 @@ public class User implements Serializable {
     @Column(name = "USERNAME")
     private String username;
 
-    @Column(name = "E-MAIL")
+    @Column(name = "E_MAIL")
     private String Email;
 
     @Column(name = "FIRST_NAME")
@@ -28,11 +29,5 @@ public class User implements Serializable {
 
     @Column(name = "LAST_NAME")
     private String  lastName;
-
-
-
-
-
-
 
 }
