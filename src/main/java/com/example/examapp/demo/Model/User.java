@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -28,11 +29,5 @@ public class User implements Serializable {
 
     @Column(name = "LAST_NAME")
     private String  lastName;
-
-
-
-
-
-
 
 }
