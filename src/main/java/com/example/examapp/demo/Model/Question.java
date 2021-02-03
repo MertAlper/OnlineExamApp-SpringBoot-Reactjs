@@ -1,43 +1,35 @@
 package com.example.examapp.demo.Model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 
-@Table(name = "EXAM")
+@Table(name = "QUESTION")
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
-public class Exam implements Serializable {
+public class Question implements Serializable {
 
     @Id
-    @Column(name = "EXAM_ID")
+    @Column(name = "QUESTION_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long examId;
 
-    @Column(name = "START_DATE")
-    private Date startDate;
+    @Column(name = "QUESTION_TITLE")
+    private String questionTitle;
 
-    @Column(name = "END_DATE")
-    private Date endDate;
+    @ManyToOne
+    @JoinColumn(name ="EXAM_ID")
+    private  Exam exam;
 
-    @OneToMany(mappedBy="exam")
-    private Set<Question> questions;
-
-
-
-
-
-
+    @OneToMany(mappedBy="question")
+    private Set<Choice> choices;
 
 
 
