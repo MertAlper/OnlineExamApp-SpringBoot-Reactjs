@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,32 +23,25 @@ import java.util.Set;
 public class Exam implements Serializable {
 
     @Id
-    @Column(name = "EXAM_ID")
+    @Column(name = "ExamId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long examId;
 
-    @Column(name = "START_DATE")
+    @Column(name = "Title", nullable = false)
+    private String title;
+
+    @Column(name = "StartDate", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date startDate;
 
-    @Column(name = "END_DATE")
+    @Column(name = "EndDate")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
 
-    @OneToMany(mappedBy="exam")
-    private Set<Question> questions;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "ExamId")
+    private List<Question> questions;
 
 }

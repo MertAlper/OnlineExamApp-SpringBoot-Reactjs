@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 
@@ -19,27 +20,15 @@ import java.util.Set;
 public class Question implements Serializable {
 
     @Id
-    @Column(name = "QUESTION_ID")
+    @Column(name = "QuestId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long examId;
 
-    @Column(name = "QUESTION_TITLE")
+    @Column(name = "QuestTitle", nullable = false)
     private String questionTitle;
 
-    @ManyToOne
-    @JoinColumn(name ="EXAM_ID")
-    private  Exam exam;
-
-    @OneToMany(mappedBy="question")
-    private Set<Choice> choices;
-
-
-
-
-
-
-
-
-
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "QuestId")
+    private List<Choice> choices;
 
 }

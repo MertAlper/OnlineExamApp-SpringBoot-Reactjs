@@ -18,16 +18,17 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
-    @Column(name = "USERNAME")
+    @Column(name = "UserName", nullable = false)
     private String username;
 
-    @Column(name = "E_MAIL")
+    @Column(name = "Email", nullable = false)
     private String Email;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FirstName", nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LastName", nullable = false)
     private String  lastName;
+
 
 }

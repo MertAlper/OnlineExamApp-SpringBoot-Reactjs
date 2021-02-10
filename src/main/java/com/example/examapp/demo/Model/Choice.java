@@ -17,18 +17,14 @@ import java.io.Serializable;
 public class Choice implements Serializable {
 
     @Id
-    @Column(name = "EXAM_ID")
+    @Column(name = "ChoiceId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long choiceId;
 
-    @Column(name = "CHOICE")
-    private String choice;
+    @Column(name = "Description", nullable = false)
+    private String description;
 
-    @ManyToOne
-    @JoinColumn(name="QUESTION_ID")
-    private Question question;
-
-
-
+    @Column(name = "is_True", nullable = false)
+    private boolean isTrue;
 
 }
