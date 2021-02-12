@@ -7,9 +7,6 @@ import com.example.examapp.demo.model.Exam;
 import com.example.examapp.demo.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -67,7 +64,7 @@ public class StudentService implements GenericService<Student> {
 
     }
 
-    public Attendance registerUserToExam(long studentId, long examId) {
+    public void registerUserToExam(long studentId, long examId) {
 
         Exam exam = examDao.getEntityById(examId);
         Student student = getById(studentId);
@@ -80,9 +77,5 @@ public class StudentService implements GenericService<Student> {
 
         exam.addAttendance(attendance);
         student.addAttendance(attendance);
-
-        save(student);
-
-        return attendance;
     }
 }

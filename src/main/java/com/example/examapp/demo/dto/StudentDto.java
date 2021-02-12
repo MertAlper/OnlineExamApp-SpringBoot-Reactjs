@@ -1,7 +1,5 @@
 package com.example.examapp.demo.dto;
 
-import com.example.examapp.demo.model.Attendance;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 

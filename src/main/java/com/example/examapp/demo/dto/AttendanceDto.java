@@ -1,13 +1,6 @@
 package com.example.examapp.demo.dto;
 
-import com.example.examapp.demo.model.Exam;
-import com.example.examapp.demo.model.Student;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter

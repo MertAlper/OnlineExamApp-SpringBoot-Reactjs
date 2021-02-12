@@ -1,17 +1,7 @@
 package com.example.examapp.demo.model;
 
-import com.example.examapp.demo.util.ExamSerializer;
-import com.example.examapp.demo.util.StudentSerializer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
-
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
 
 @Table(name = "ATTENDANCE")
 @Entity
