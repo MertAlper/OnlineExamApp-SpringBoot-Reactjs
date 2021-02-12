@@ -1,4 +1,4 @@
-package com.example.examapp.demo.Model;
+package com.example.examapp.demo.model;
 
 
 import lombok.*;
@@ -6,12 +6,12 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Table(name = "USER")
-@Entity
+
+@MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -22,13 +22,12 @@ public class User implements Serializable {
     private String username;
 
     @Column(name = "Email", nullable = false)
-    private String Email;
+    private String email;
 
     @Column(name = "FirstName", nullable = false)
     private String firstName;
 
     @Column(name = "LastName", nullable = false)
     private String  lastName;
-
 
 }

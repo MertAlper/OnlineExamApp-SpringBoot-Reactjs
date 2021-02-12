@@ -1,9 +1,7 @@
-package com.example.examapp.demo.Model;
+package com.example.examapp.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +10,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Choice implements Serializable {
@@ -24,7 +23,7 @@ public class Choice implements Serializable {
     @Column(name = "Description", nullable = false)
     private String description;
 
-    @Column(name = "is_True", nullable = false)
-    private boolean isTrue;
+    @Column(name = "isTrue", nullable = false)
+    private boolean correct;
 
 }
