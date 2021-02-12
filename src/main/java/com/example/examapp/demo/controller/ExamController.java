@@ -3,12 +3,10 @@ package com.example.examapp.demo.controller;
 import com.example.examapp.demo.dao.Dao;
 import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.dto.ExamDto;
-import com.example.examapp.demo.dto.StudentDto;
-import com.example.examapp.demo.dto.UserDto;
 import com.example.examapp.demo.model.Attendance;
 import com.example.examapp.demo.model.Exam;
 import com.example.examapp.demo.model.Student;
-import com.example.examapp.demo.model.User;
+import com.example.examapp.demo.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,7 @@ import java.util.Map;
 public class ExamController {
 
     @Autowired
-    private Dao<Exam> examDao;
+    private GenericService<Exam> examService;
 
     @Autowired
     private Dao<Student> studentDao;
@@ -42,7 +40,7 @@ public class ExamController {
                 .attendances(new ArrayList<>())
                 .build();
 
-        exam = examDao.save(exam);
+        exam = examService.save(exam);
 
         Map<String, String> map = new HashMap<>();
         map.put("message", "Exam was created");
@@ -57,7 +55,7 @@ public class ExamController {
 
         // TODO: Use HATEOAS for inner objects.
 
-        Exam exam = examDao.getEntityById(examId);
+        Exam exam = examService.getById(examId);
         List<AttendanceDto> attendanceDtos = new ArrayList<>();
 
         for (Attendance att: exam.getAttendances()) {

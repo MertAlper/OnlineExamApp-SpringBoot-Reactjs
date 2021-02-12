@@ -6,6 +6,8 @@ import com.example.examapp.demo.dto.StudentDto;
 import com.example.examapp.demo.model.Attendance;
 import com.example.examapp.demo.model.Exam;
 import com.example.examapp.demo.model.Student;
+import com.example.examapp.demo.service.GenericService;
+import com.example.examapp.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ import java.util.Map;
 public class StudentController {
 
     @Autowired
-    private Dao<Student> studentDao;
+    private GenericService<Student> studentService;
 
     @Autowired
     private Dao<Exam> examDao;
@@ -31,7 +33,7 @@ public class StudentController {
 
         // TODO: Use HATEOAS for inner objects
 
-        Student student = studentDao.getEntityById(studentId);
+        Student student = studentService.getById(studentId);
         StudentDto studentDto = new StudentDto();
 
         List<AttendanceDto> attendanceDtoList = new ArrayList<>();
@@ -88,7 +90,7 @@ public class StudentController {
         student.setLastName(studentDto.getLastName());
         student.setEmail(studentDto.getEmail());
 
-        student = studentDao.save(student);
+        student = studentService.save(student);
 
         Map<String, String> map = new HashMap<>();
         map.put("message", "student was created successfully");
@@ -98,45 +100,31 @@ public class StudentController {
     }
 
     @PostMapping("{studentId}/{examId}")
-    public void registerUserToExam(@PathVariable("studentId") long studentId,
+    public AttendanceDto registerUserToExam(@PathVariable("studentId") long studentId,
                                    @PathVariable("examId") long examId){
 
-        // TODO: return attendance info
         // TODO: Use HATEOAS for inner objects.
         // TODO: This method should be replaced by dynamic URL
 
-        Exam exam = examDao.getEntityById(examId);
-        Student student = studentDao.getEntityById(studentId);
+        Attendance attendance = ((StudentService) studentService).registerUserToExam(studentId, examId);
 
-        Attendance attendance = Attendance.builder()
-                .exam(exam)
-                .student(student)
-                .attended(false)
+        AttendanceDto attendanceDto = AttendanceDto.builder()
+                .examId(attendance.getExam().getExamId())
+                .studentId(attendance.getStudent().getUserId())
+                .id(attendance.getId())
+                .attended(attendance.isAttended())
+                .numOfTrues(attendance.getNumOfTrues())
+                .numOfFalses(attendance.getNumOfFalses())
+                .pointReceived(attendance.getPointReceived())
                 .build();
 
-        exam.addAttendance(attendance);
-        student.addAttendance(attendance);
-
-        studentDao.save(student);
+        return attendanceDto;
     }
 
     @PutMapping
     public void saveExamResult(@RequestBody AttendanceDto attendanceDto){
 
-        Student student = studentDao.getEntityById(attendanceDto.getStudentId());
-
-        Attendance attendance = student.getAttendanceList().stream()
-                .filter(att -> att.getId() == attendanceDto.getId())
-                .findFirst()
-                .get();
-
-        attendance.setAttended(attendanceDto.isAttended());
-        attendance.setNumOfFalses(attendanceDto.getNumOfFalses());
-        attendance.setNumOfTrues(attendanceDto.getNumOfTrues());
-        attendance.setPointReceived(attendanceDto.getPointReceived());
-
-        studentDao.save(student);
-
+        ((StudentService)studentService).saveExamResult(attendanceDto);
 //        Attendance attendance = Attendance.builder()
 //                .student(studentDao.getEntityById(attendanceDto.getStudentId()))
 //                .exam(examDao.getEntityById(attendanceDto.getExamId()))
