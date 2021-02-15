@@ -44,6 +44,17 @@ public class Exam implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam")
     private List<Attendance> attendances;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PublisherId", nullable = false)
+    private Instructor publisher;
+
+    /**
+     * Adds the given attendance to the student's attendanceList.
+     * And also sets the student of the given attendance object to this student.
+     * So there is no need to set it again in another place.
+     * @param att the attendance object
+     */
+
     public void addAttendance(Attendance att){
         attendances.add(att);
         att.setExam(this);

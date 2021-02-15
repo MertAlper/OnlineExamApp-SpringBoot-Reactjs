@@ -1,14 +1,13 @@
 package com.example.examapp.demo.service;
 
 import com.example.examapp.demo.dao.Dao;
+import com.example.examapp.demo.dao.StudentDaoImpl;
 import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.model.Attendance;
-import com.example.examapp.demo.model.Exam;
 import com.example.examapp.demo.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -17,18 +16,9 @@ public class StudentService implements GenericService<Student> {
     @Autowired
     private Dao<Student> studentDao;
 
-    @Autowired
-    private Dao<Exam> examDao;
-
     @Override
     public Student getById(long id) {
-
-        Student student = studentDao.getEntityById(id);
-
-        if (student == null)
-            throw new EntityNotFoundException();
-
-        return student;
+        return studentDao.getEntityById(id);
     }
 
     @Override
@@ -46,6 +36,12 @@ public class StudentService implements GenericService<Student> {
         studentDao.delete(obj);
     }
 
+    /**
+     * Gets the student of the attendance
+     * and then reach the attendance object that attendanceDto represents
+     * and updates that attendance object based on the values of the attendanceDto
+     * @param attendanceDto
+     */
     public void saveExamResult(AttendanceDto attendanceDto) {
 
         Student student = studentDao.getEntityById(attendanceDto.getStudentId());
@@ -64,18 +60,7 @@ public class StudentService implements GenericService<Student> {
 
     }
 
-    public void registerUserToExam(long studentId, long examId) {
-
-        Exam exam = examDao.getEntityById(examId);
-        Student student = getById(studentId);
-
-        Attendance attendance = Attendance.builder()
-                .exam(exam)
-                .student(student)
-                .attended(false)
-                .build();
-
-        exam.addAttendance(attendance);
-        student.addAttendance(attendance);
+    public Student getByUsername(String username) {
+        return ((StudentDaoImpl)studentDao).getByUsername(username);
     }
 }

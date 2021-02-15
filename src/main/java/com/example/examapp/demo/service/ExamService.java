@@ -2,7 +2,9 @@ package com.example.examapp.demo.service;
 
 import com.example.examapp.demo.dao.Dao;
 import com.example.examapp.demo.model.Exam;
+import com.example.examapp.demo.model.Instructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,9 @@ public class ExamService implements GenericService<Exam> {
 
     @Autowired
     private Dao<Exam> examDao;
+
+    @Autowired
+    private GenericService<Instructor> instructorService;
 
     @Override
     @Transactional
@@ -37,13 +42,22 @@ public class ExamService implements GenericService<Exam> {
 
     }
 
+    /**
+     * Gets the current logged in user to set him/her as the publisher of the exam.
+     * This user can only be an instructor, because only instructors can access this part of the app.
+     * @param obj
+     * @return
+     */
     @Override
     @Transactional
     public Exam save(Exam obj) {
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Instructor instructor = ((InstructorService)instructorService).getByUsername(username);
+        instructor.addToPublishedExams(obj);
+
         Exam exam = examDao.save(obj);
         return exam;
-
     }
 
     @Override

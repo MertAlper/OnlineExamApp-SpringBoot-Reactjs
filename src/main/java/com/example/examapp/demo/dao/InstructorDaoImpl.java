@@ -1,5 +1,6 @@
 package com.example.examapp.demo.dao;
 
+import com.example.examapp.demo.model.Instructor;
 import com.example.examapp.demo.model.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,52 +13,60 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class StudentDaoImpl implements Dao<Student>{
+public class InstructorDaoImpl implements Dao<Instructor> {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Override
-    public Student getEntityById(long id) {
+    public Instructor getEntityById(long id) {
         Session session = sessionFactory.getCurrentSession();
 
         try {
-            return session.get(Student.class, id);
+            return session.createQuery(
+                         "from Instructor i " +
+                            "left join fetch i.publishedExams", Instructor.class
+            ).getSingleResult();
         } catch (NoResultException exp) {
             return null;
         }
     }
 
     @Override
-    public List<Student> getAllEntities() {
+    public List<Instructor> getAllEntities() {
         Session session = sessionFactory.getCurrentSession();
-        List<Student> students = session.createQuery("from Student").getResultList();
-        return students;
+
+        return session.createQuery(
+                "from Instructor i " +
+                        "left join fetch i.publishedExams", Instructor.class
+        ).getResultList();
+
     }
 
     @Override
-    public Student save(Student obj) {
+    public Instructor save(Instructor obj) {
         Session session = sessionFactory.getCurrentSession();
-        return (Student)session.merge(obj);
+        return (Instructor) session.merge(obj);
     }
 
     @Override
-    public void delete(Student obj) {
+    public void delete(Instructor obj) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(obj);
     }
 
-    public Student getByUsername(String username){
+    public Instructor getByUsername(String username){
         Session session = sessionFactory.getCurrentSession();
 
         try {
             return session.createQuery(
-                     "from Student " +
-                        "where username = :username", Student.class)
+                    "from Instructor " +
+                            "where username = :username", Instructor.class)
                     .setParameter("username", username)
                     .getSingleResult();
         } catch (NoResultException exp) {
             return null;
         }
     }
+
 }

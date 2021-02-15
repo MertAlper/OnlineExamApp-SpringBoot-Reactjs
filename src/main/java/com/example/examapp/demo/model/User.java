@@ -1,11 +1,11 @@
 package com.example.examapp.demo.model;
 
 
+import com.example.examapp.demo.config.security.ApplicationUserRole;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -18,10 +18,10 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
-    @Column(name = "UserName", nullable = false)
+    @Column(name = "UserName", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "Email", nullable = false)
+    @Column(name = "Email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "FirstName", nullable = false)

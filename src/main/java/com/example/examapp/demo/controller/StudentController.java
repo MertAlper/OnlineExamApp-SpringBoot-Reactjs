@@ -4,6 +4,7 @@ import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.dto.StudentDto;
 import com.example.examapp.demo.model.Attendance;
 import com.example.examapp.demo.model.Student;
+import com.example.examapp.demo.service.ConfirmationTokenService;
 import com.example.examapp.demo.service.GenericService;
 import com.example.examapp.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,11 @@ import java.util.Map;
 public class StudentController {
 
     private final GenericService<Student> studentService;
-
+    private final ConfirmationTokenService tokenService;
     @Autowired
-    public StudentController(GenericService<Student> genericService){
+    public StudentController(GenericService<Student> genericService, ConfirmationTokenService tokenService){
         studentService = genericService;
+        this.tokenService = tokenService;
     }
 
     @GetMapping("{studentId}")
@@ -33,6 +35,8 @@ public class StudentController {
         // TODO: Use HATEOAS for inner objects
 
         Student student = studentService.getById(studentId);
+
+        // Maps Student to StudentDto
         StudentDto studentDto = new StudentDto();
 
         List<AttendanceDto> attendanceDtoList = new ArrayList<>();
@@ -48,24 +52,6 @@ public class StudentController {
                     .numOfFalses(att.getNumOfFalses())
                     .build();
             
-//            AttendanceDto attendanceDto = AttendanceDto.builder()
-//                    .student(null)
-//                    .exam(
-//                            ExamDto.builder()
-//                                    .examId(att.getExam().getExamId())
-//                                    .endDate(att.getExam().getEndDate())
-//                                    .questions(att.getExam().getQuestions())
-//                                    .startDate(att.getExam().getStartDate())
-//                                    .title(att.getExam().getTitle())
-//                                    .build()
-//                    )
-//                    .attended(att.isAttended())
-//                    .pointReceived(att.getPointReceived())
-//                    .id(att.getId())
-//                    .numOfTrues(att.getNumOfTrues())
-//                    .numOfFalses(att.getNumOfFalses())
-//                    .build();
-
             attendanceDtoList.add(attendanceDto);
         }
 
@@ -80,46 +66,16 @@ public class StudentController {
 
     }
 
-    @PostMapping()
-    public ResponseEntity<Map<String, String>> createStudent(@RequestBody StudentDto studentDto){
-
-        Student student = new Student();
-        student.setUsername(studentDto.getUserName());
-        student.setFirstName(studentDto.getFirstName());
-        student.setLastName(studentDto.getLastName());
-        student.setEmail(studentDto.getEmail());
-
-        student = studentService.save(student);
-
-        Map<String, String> map = new HashMap<>();
-        map.put("message", "student was created successfully");
-        map.put("studentId", String.valueOf(student.getUserId()));
-
-        return new ResponseEntity<>(map, HttpStatus.OK);
-    }
-
-    @PostMapping("{studentId}/{examId}")
-    public void registerUserToExam(@PathVariable("studentId") long studentId,
-                                   @PathVariable("examId") long examId){
+    @GetMapping(path = "confirm")
+    public void registerUserToExam(@RequestParam("token") String token){
         // TODO: Use HATEOAS for inner objects.
-        // TODO: This method should be replaced by dynamic URL
-        ((StudentService) studentService).registerUserToExam(studentId, examId);
+        tokenService.processToken(token);
     }
 
     @PostMapping("saveResult")
     public void saveExamResult(@RequestBody AttendanceDto attendanceDto){
 
         ((StudentService)studentService).saveExamResult(attendanceDto);
-//        Attendance attendance = Attendance.builder()
-//                .student(studentDao.getEntityById(attendanceDto.getStudentId()))
-//                .exam(examDao.getEntityById(attendanceDto.getExamId()))
-//                .id(attendanceDto.getExamId())
-//                .numOfFalses(attendanceDto.getNumOfFalses())
-//                .numOfTrues(attendanceDto.getNumOfTrues())
-//                .pointReceived(attendanceDto.getPointReceived())
-//                .attended(attendanceDto.isAttended())
-//                .build();
-//
 
     }
 }
