@@ -22,17 +22,9 @@ public class ExamDaoImpl implements Dao<Exam> {
         Exam exam = session.createQuery(
                 "select DISTINCT e " +
                     "from Exam e " +
-                    "left join fetch e.questions " +
+                    "left join fetch e.attendances " +
                     "where e.id = :id", Exam.class)
                 .setParameter("id", id)
-                .getSingleResult();
-
-        exam = session.createQuery(
-                "select DISTINCT e " +
-                        "from Exam e " +
-                        "left join fetch e.attendances " +
-                        "where e.id = :id", Exam.class)
-                .setParameter("id", exam.getExamId())
                 .getSingleResult();
 
         return exam;
@@ -42,8 +34,9 @@ public class ExamDaoImpl implements Dao<Exam> {
     public List<Exam> getAllEntities() {
         Session session = sessionFactory.getCurrentSession();
         List<Exam> exams = session.createQuery(
-                "from Exam e left join fetch e.questions",
+                "from Exam e left join fetch e.attendances",
                 Exam.class).getResultList();
+
         return exams;
     }
 

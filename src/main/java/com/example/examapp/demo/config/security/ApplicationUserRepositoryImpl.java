@@ -16,6 +16,7 @@ public class ApplicationUserRepositoryImpl implements ApplicationUserRepository 
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Override
     public Optional<ApplicationUser> findByUsername(String username){
         Session session = sessionFactory.getCurrentSession();
 
@@ -28,6 +29,12 @@ public class ApplicationUserRepositoryImpl implements ApplicationUserRepository 
         } catch (NoResultException exp){
             return Optional.empty();
         }
+    }
+
+    @Override
+    public long save(ApplicationUser user) {
+        Session session = sessionFactory.getCurrentSession();
+        return (long) session.save(user);
     }
 
 }

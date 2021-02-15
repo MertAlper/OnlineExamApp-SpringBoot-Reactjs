@@ -1,6 +1,7 @@
 package com.example.examapp.demo.service;
 
 import com.example.examapp.demo.dao.Dao;
+import com.example.examapp.demo.dao.StudentDaoImpl;
 import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.model.Attendance;
 import com.example.examapp.demo.model.Exam;
@@ -17,18 +18,9 @@ public class StudentService implements GenericService<Student> {
     @Autowired
     private Dao<Student> studentDao;
 
-    @Autowired
-    private Dao<Exam> examDao;
-
     @Override
     public Student getById(long id) {
-
-        Student student = studentDao.getEntityById(id);
-
-        if (student == null)
-            throw new EntityNotFoundException();
-
-        return student;
+        return studentDao.getEntityById(id);
     }
 
     @Override
@@ -64,18 +56,7 @@ public class StudentService implements GenericService<Student> {
 
     }
 
-    public void registerUserToExam(long studentId, long examId) {
-
-        Exam exam = examDao.getEntityById(examId);
-        Student student = getById(studentId);
-
-        Attendance attendance = Attendance.builder()
-                .exam(exam)
-                .student(student)
-                .attended(false)
-                .build();
-
-        exam.addAttendance(attendance);
-        student.addAttendance(attendance);
+    public Student getByUsername(String username) {
+        return ((StudentDaoImpl)studentDao).getByUsername(username);
     }
 }

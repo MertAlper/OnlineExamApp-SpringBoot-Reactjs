@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +14,9 @@ public class ApplicationUserService implements UserDetailsService {
 
     @Autowired
     private ApplicationUserRepository appUserRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -21,6 +26,18 @@ public class ApplicationUserService implements UserDetailsService {
                 );
     }
 
-    // TODO: Sign up user
+    public void signUpUser(ApplicationUser user){
+        boolean userExists = appUserRepository.findByUsername(user.getUsername())
+                .isPresent();
+
+        if (userExists) {
+            throw new IllegalStateException("user already exists");
+        }
+
+        String encodedPasswod = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPasswod);
+
+        appUserRepository.save(user);
+    }
 
 }

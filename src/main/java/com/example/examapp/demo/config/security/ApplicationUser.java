@@ -16,7 +16,6 @@ import java.util.Collections;
 @Table(name = "APPLICATION_USER")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class ApplicationUser implements UserDetails {
 
@@ -37,6 +36,14 @@ public class ApplicationUser implements UserDetails {
     @Column(name = "Role")
     @Enumerated(EnumType.STRING)
     private ApplicationUserRole role;
+
+    public ApplicationUser(String username, String password,
+                           boolean enabled, ApplicationUserRole role) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

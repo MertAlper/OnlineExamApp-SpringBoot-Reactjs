@@ -19,4 +19,9 @@ public class Instructor extends User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "publisher")
     private List<Exam> publishedExams;
 
+    public void addToPublishedExams(Exam exam){
+        publishedExams.add(exam);
+        exam.setPublisher(this);
+    }
+
 }

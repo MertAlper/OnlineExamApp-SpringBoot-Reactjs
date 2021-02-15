@@ -3,7 +3,9 @@ package com.example.examapp.demo.controller;
 import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.dto.ExamDto;
 import com.example.examapp.demo.model.Attendance;
+import com.example.examapp.demo.model.ConfirmationToken;
 import com.example.examapp.demo.model.Exam;
+import com.example.examapp.demo.service.ConfirmationTokenService;
 import com.example.examapp.demo.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,26 +13,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/exams")
 public class ExamController {
 
     private final GenericService<Exam> examService;
+    private final ConfirmationTokenService tokenService;
 
     @Autowired
-    public ExamController(GenericService<Exam> genericService){
+    public ExamController(GenericService<Exam> genericService, ConfirmationTokenService tokenService){
         examService = genericService;
+        this.tokenService = tokenService;
     }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createExam(@RequestBody ExamDto examDto){
-
-        // TODO: Create a unique URL for the exam.
 
         Exam exam = Exam.builder()
                 .endDate(examDto.getEndDate())
@@ -40,14 +40,18 @@ public class ExamController {
                 .attendances(new ArrayList<>())
                 .build();
 
-        exam = examService.save(exam);
+        String token = UUID.randomUUID().toString();
+        String link = "http://localhost:8080/examApp/api/students/confirm?token=" + token;
 
-        Map<String, String> map = new HashMap<>();
-        map.put("message", "Exam was created");
-        map.put("examId", String.valueOf(exam.getExamId()));
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token, LocalDateTime.now().plusDays(21), LocalDateTime.now(), null, exam
+        );
+        examService.save(exam);
+        tokenService.save(confirmationToken);
 
-        return new ResponseEntity<>(map, HttpStatus.OK);
-
+        Map<String, String> properties = new HashMap<>();
+        properties.put("examUrl", link);
+        return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
     @GetMapping("{examId}")
