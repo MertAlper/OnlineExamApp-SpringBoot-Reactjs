@@ -32,6 +32,7 @@ public class ExamController {
     @PostMapping
     public ResponseEntity<Map<String, String>> createExam(@RequestBody ExamDto examDto){
 
+        // Creating an exam entity based on examDto
         Exam exam = Exam.builder()
                 .endDate(examDto.getEndDate())
                 .title(examDto.getTitle())
@@ -40,12 +41,14 @@ public class ExamController {
                 .attendances(new ArrayList<>())
                 .build();
 
+        // Create a unique url for the new exam.
         String token = UUID.randomUUID().toString();
         String link = "http://localhost:8080/examApp/api/students/confirm?token=" + token;
 
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token, LocalDateTime.now().plusDays(21), LocalDateTime.now(), null, exam
         );
+
         examService.save(exam);
         tokenService.save(confirmationToken);
 
@@ -60,8 +63,9 @@ public class ExamController {
         // TODO: Use HATEOAS for inner objects.
 
         Exam exam = examService.getById(examId);
-        List<AttendanceDto> attendanceDtos = new ArrayList<>();
 
+        // Maps attendances of exam to their corresponding AttendanceDto objects
+        List<AttendanceDto> attendanceDtos = new ArrayList<>();
         for (Attendance att: exam.getAttendances()) {
 
             AttendanceDto attendanceDto = AttendanceDto.builder()
@@ -77,6 +81,7 @@ public class ExamController {
             attendanceDtos.add(attendanceDto);
         }
 
+        // Builds examDto object and returns it
         return ExamDto.builder()
                 .examId(exam.getExamId())
                 .title(exam.getTitle())

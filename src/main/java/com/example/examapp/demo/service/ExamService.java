@@ -42,6 +42,12 @@ public class ExamService implements GenericService<Exam> {
 
     }
 
+    /**
+     * Gets the current logged in user to set him/her as the publisher of the exam.
+     * This user can only be an instructor, because only instructors can access this part of the app.
+     * @param obj
+     * @return
+     */
     @Override
     @Transactional
     public Exam save(Exam obj) {

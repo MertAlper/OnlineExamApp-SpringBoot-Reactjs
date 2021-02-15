@@ -31,6 +31,12 @@ public class ConfirmationTokenService {
         confirmationTokenRepository.delete(token);
     }
 
+    /**
+     * Gets the ConfirmationToken object that the given token represents.
+     * Checks if such a confirmation token exists or whether it has expired.
+     * Then, sets the current logged in user as the participant of the exam.
+     * @param token
+     */
     public void processToken(String token){
         ConfirmationToken confirmationToken = getToken(token);
 
@@ -42,6 +48,8 @@ public class ConfirmationTokenService {
             throw new IllegalStateException("token has expired");
         }
 
+        // The code guarantees that this username belongs to a student.
+        // Because only a student can access this part of the app.
         String userName = SecurityContextHolder
                 .getContext().getAuthentication().getName();
         Student student = studentService.getByUsername(userName);

@@ -16,6 +16,10 @@ public class ApplicationUserRepositoryImpl implements ApplicationUserRepository 
     @Autowired
     private SessionFactory sessionFactory;
 
+    /**
+     * @param username
+     * @return
+     */
     @Override
     public Optional<ApplicationUser> findByUsername(String username){
         Session session = sessionFactory.getCurrentSession();

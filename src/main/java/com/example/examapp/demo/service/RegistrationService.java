@@ -23,6 +23,13 @@ public class RegistrationService {
     @Autowired
     private InstructorService instructorService;
 
+    /**
+     * Checks if the given role of the request is predetermined role.
+     * If not, throws an IllegalStateException
+     * Sign up user based on the role of the reqeust.
+     *
+     * @param request
+     */
     public void register(RegistrationRequest request) {
 
         if (!(request.getRole().equalsIgnoreCase("student") || request.getRole().equalsIgnoreCase("instructor"))){
@@ -30,6 +37,8 @@ public class RegistrationService {
         }
 
 
+        // This part of the method is for registering application user for
+        // security(password and username etc.)
         applicationUserService.signUpUser(
                 new ApplicationUser(
                         request.getUsername(),
@@ -40,6 +49,7 @@ public class RegistrationService {
                 )
         );
 
+        // This part of the method is for storing the actual entity based on the role.
         if (request.getRole().equalsIgnoreCase("student")) {
             Student student = new Student();
             student.setUsername(request.getUsername());

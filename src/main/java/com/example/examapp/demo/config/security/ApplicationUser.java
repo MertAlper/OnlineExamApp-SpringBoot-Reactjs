@@ -12,6 +12,10 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * This class represents the application user from the point of security.
+ */
+
 @Entity
 @Table(name = "APPLICATION_USER")
 @Getter

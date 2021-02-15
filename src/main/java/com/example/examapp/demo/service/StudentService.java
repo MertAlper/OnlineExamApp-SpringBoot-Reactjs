@@ -4,12 +4,10 @@ import com.example.examapp.demo.dao.Dao;
 import com.example.examapp.demo.dao.StudentDaoImpl;
 import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.model.Attendance;
-import com.example.examapp.demo.model.Exam;
 import com.example.examapp.demo.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -38,6 +36,12 @@ public class StudentService implements GenericService<Student> {
         studentDao.delete(obj);
     }
 
+    /**
+     * Gets the student of the attendance
+     * and then reach the attendance object that attendanceDto represents
+     * and updates that attendance object based on the values of the attendanceDto
+     * @param attendanceDto
+     */
     public void saveExamResult(AttendanceDto attendanceDto) {
 
         Student student = studentDao.getEntityById(attendanceDto.getStudentId());

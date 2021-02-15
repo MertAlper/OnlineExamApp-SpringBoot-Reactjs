@@ -35,6 +35,8 @@ public class StudentController {
         // TODO: Use HATEOAS for inner objects
 
         Student student = studentService.getById(studentId);
+
+        // Maps Student to StudentDto
         StudentDto studentDto = new StudentDto();
 
         List<AttendanceDto> attendanceDtoList = new ArrayList<>();

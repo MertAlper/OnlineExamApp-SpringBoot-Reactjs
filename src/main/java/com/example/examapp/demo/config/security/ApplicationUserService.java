@@ -26,6 +26,12 @@ public class ApplicationUserService implements UserDetailsService {
                 );
     }
 
+    /**
+     * Checks if a user with the username already exists
+     * If user exists, throws IllegalStateException.
+     *
+     * @param user
+     */
     public void signUpUser(ApplicationUser user){
         boolean userExists = appUserRepository.findByUsername(user.getUsername())
                 .isPresent();
