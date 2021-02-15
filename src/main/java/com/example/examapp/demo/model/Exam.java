@@ -44,6 +44,10 @@ public class Exam implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam")
     private List<Attendance> attendances;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PublisherId", nullable = false)
+    private Instructor publisher;
+
     public void addAttendance(Attendance att){
         attendances.add(att);
         att.setExam(this);

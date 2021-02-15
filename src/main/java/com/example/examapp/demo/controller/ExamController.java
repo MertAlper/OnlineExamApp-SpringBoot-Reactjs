@@ -73,7 +73,6 @@ public class ExamController {
             attendanceDtos.add(attendanceDto);
         }
 
-
         return ExamDto.builder()
                 .examId(exam.getExamId())
                 .title(exam.getTitle())
@@ -107,49 +106,5 @@ public class ExamController {
 
         examService.delete(exam);
     }
-
-//    @GetMapping("{examId}/attendances")
-//    public List<AttendanceDto> getAttendances(@PathVariable long examId){
-//
-//        Exam exam = examDao.getEntityById(examId);
-//
-//        List<AttendanceDto> attendanceDtos = new ArrayList<>();
-//
-//        for (Attendance att: exam.getAttendances()){
-//
-//            AttendanceDto attendanceDto = AttendanceDto.builder()
-//                    .examId(att.getExam().getExamId())
-//                    .attended(att.isAttended())
-//                    .id(att.getId())
-//                    .numOfFalses(att.getNumOfFalses())
-//                    .numOfTrues(att.getNumOfTrues())
-//                    .pointReceived(att.getPointReceived())
-//                    .studentId(att.getStudent().getUserId())
-//                    .build();
-//
-//            // TODO: Discuss two ways
-//
-////            AttendanceDto attendanceDto = AttendanceDto.builder()
-////                    .exam(null)
-////                    .attended(att.isAttended())
-////                    .id(att.getId())
-////                    .numOfFalses(att.getNumOfFalses())
-////                    .numOfTrues(att.getNumOfTrues())
-////                    .pointReceived(att.getPointReceived())
-////                    .student(
-////                            StudentDto.builder()
-////                            .email(att.getStudent().getEmail())
-////                            .firstName(att.getStudent().getFirstName())
-////                            .lastName(att.getStudent().getLastName())
-////                            .userId(att.getStudent().getUserId())
-////                            .build()
-////                    )
-////                    .build();
-//
-//            attendanceDtos.add(attendanceDto);
-//        }
-//
-//        return attendanceDtos;
-//    }
 
 }
