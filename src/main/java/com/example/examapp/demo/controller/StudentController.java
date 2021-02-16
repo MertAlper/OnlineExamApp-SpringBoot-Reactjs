@@ -21,8 +21,8 @@ public class StudentController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping
-    public StudentDto getStudent(@RequestParam("user") String username){
+    @GetMapping(path = "{user}")
+    public StudentDto getStudent(@PathVariable("user") String username){
 
         // TODO: Use HATEOAS for inner objects
 

@@ -46,10 +46,12 @@ public class ExamController {
         String token = UUID.randomUUID().toString();
         String link = "http://localhost:8080/examApp/api/students/confirm?token=" + token;
 
+        exam = examService.save(exam);
+
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token, LocalDateTime.now().plusDays(21), LocalDateTime.now(), null, exam
         );
-        examService.save(exam);
+        tokenService.save(confirmationToken);
 
         Map<String, String> properties = new HashMap<>();
         properties.put("examUrl", link);

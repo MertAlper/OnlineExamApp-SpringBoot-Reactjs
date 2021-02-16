@@ -11,6 +11,7 @@ public class InstructorDtoMapper {
     public static InstructorDto getInstructorDto(Instructor instructor){
         InstructorDto instructorDto = new InstructorDto();
 
+        instructorDto.setUserId(instructor.getUserId());
         instructorDto.setEmail(instructor.getEmail());
         instructorDto.setFirstName(instructor.getFirstName());
         instructorDto.setLastName(instructor.getLastName());
