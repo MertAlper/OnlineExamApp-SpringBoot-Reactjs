@@ -1,5 +1,6 @@
 package com.example.examapp.demo.controller;
 
+import com.example.examapp.demo.controller.mapper.ExamDtoMapper;
 import com.example.examapp.demo.dto.AttendanceDto;
 import com.example.examapp.demo.dto.ExamDto;
 import com.example.examapp.demo.model.Attendance;
@@ -48,9 +49,7 @@ public class ExamController {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token, LocalDateTime.now().plusDays(21), LocalDateTime.now(), null, exam
         );
-
         examService.save(exam);
-        tokenService.save(confirmationToken);
 
         Map<String, String> properties = new HashMap<>();
         properties.put("examUrl", link);
@@ -63,33 +62,9 @@ public class ExamController {
         // TODO: Use HATEOAS for inner objects.
 
         Exam exam = examService.getById(examId);
+        ExamDto examDto = ExamDtoMapper.getExamDto(exam);
 
-        // Maps attendances of exam to their corresponding AttendanceDto objects
-        List<AttendanceDto> attendanceDtos = new ArrayList<>();
-        for (Attendance att: exam.getAttendances()) {
-
-            AttendanceDto attendanceDto = AttendanceDto.builder()
-                    .examId(att.getExam().getExamId())
-                    .attended(att.isAttended())
-                    .id(att.getId())
-                    .numOfFalses(att.getNumOfFalses())
-                    .numOfTrues(att.getNumOfTrues())
-                    .pointReceived(att.getPointReceived())
-                    .studentId(att.getStudent().getUserId())
-                    .build();
-
-            attendanceDtos.add(attendanceDto);
-        }
-
-        // Builds examDto object and returns it
-        return ExamDto.builder()
-                .examId(exam.getExamId())
-                .title(exam.getTitle())
-                .startDate(exam.getStartDate())
-                .endDate(exam.getEndDate())
-                .questions(exam.getQuestions())
-                .attendanceList(attendanceDtos)
-                .build();
+        return examDto;
     }
 
     @PutMapping("{examId}")

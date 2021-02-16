@@ -41,6 +41,10 @@ public class Exam implements Serializable {
     @JoinColumn(name = "ExamId")
     private List<Question> questions;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ConfirmationTokenId")
+    private ConfirmationToken confirmationToken;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam")
     private List<Attendance> attendances;
 

@@ -31,8 +31,7 @@ public class ConfirmationToken {
     @Column(name = "ConfirmedAt")
     private LocalDateTime confirmedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "ExamId")
+    @OneToOne(mappedBy = "confirmationToken")
     private Exam exam;
 
     public ConfirmationToken(String token, LocalDateTime expiresAt,
