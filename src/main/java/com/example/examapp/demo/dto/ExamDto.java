@@ -14,8 +14,6 @@ import java.util.List;
 @Builder
 public class ExamDto implements Serializable {
 
-    private long examId;
-
     private String title;
 
     private Date endDate;

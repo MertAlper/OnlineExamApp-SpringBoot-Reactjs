@@ -58,7 +58,7 @@ public class ExamController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("{examId}")
+    @GetMapping("/{examId}")
     public ExamDto getExam(@PathVariable("examId") long examId){
 
         // TODO: Use HATEOAS for inner objects.
@@ -69,7 +69,7 @@ public class ExamController {
         return examDto;
     }
 
-    @PutMapping("{examId}")
+    @PutMapping("/{examId}")
     public void updateExam(@PathVariable("examId") long examId, @RequestBody ExamDto examDto){
 
         Exam exam = examService.getById(examId);

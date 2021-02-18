@@ -24,7 +24,6 @@ public class ExamDtoMapper {
         List<AttendanceDto> attendanceDtos = attendanceDtos = AttendanceDtoMapper.getAttendanceDtos(exam.getAttendances());
 
         return ExamDto.builder()
-                .examId(exam.getExamId())
                 .title(exam.getTitle())
                 .startDate(exam.getStartDate())
                 .endDate(exam.getEndDate())
