@@ -2,12 +2,14 @@ package com.example.examapp.demo.model;
 
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 @Table(name = "EXAM")
@@ -40,11 +42,17 @@ public class Exam implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ExamId")
     private List<Question> questions;
+//
+//    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "ExamId")
+//    private ConfirmationToken confirmationToken;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam")
     private List<Attendance> attendances;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {
+            CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST
+    })
     @JoinColumn(name = "PublisherId", nullable = false)
     private Instructor publisher;
 

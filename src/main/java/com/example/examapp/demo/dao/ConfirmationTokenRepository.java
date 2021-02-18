@@ -34,7 +34,8 @@ public class ConfirmationTokenRepository {
 
     public long save(ConfirmationToken obj) {
         Session session = sessionFactory.getCurrentSession();
-        return (long) session.save(obj);
+        session.merge(obj);
+        return 0;
     }
 
     public void delete(ConfirmationToken obj) {

@@ -1,5 +1,7 @@
 package com.example.examapp.demo.dao;
 
+import com.example.examapp.demo.model.Attendance;
+import com.example.examapp.demo.model.Exam;
 import com.example.examapp.demo.model.Instructor;
 import com.example.examapp.demo.model.Student;
 import org.hibernate.Session;
@@ -23,10 +25,9 @@ public class InstructorDaoImpl implements Dao<Instructor> {
         Session session = sessionFactory.getCurrentSession();
 
         try {
-            return session.createQuery(
-                         "from Instructor i " +
-                            "left join fetch i.publishedExams", Instructor.class
-            ).getSingleResult();
+            Instructor instructor = session.find(Instructor.class, id);
+            instructor.setPublishedExams(getExams(instructor));
+            return instructor;
         } catch (NoResultException exp) {
             return null;
         }
@@ -59,14 +60,31 @@ public class InstructorDaoImpl implements Dao<Instructor> {
         Session session = sessionFactory.getCurrentSession();
 
         try {
-            return session.createQuery(
-                    "from Instructor " +
-                            "where username = :username", Instructor.class)
+            Instructor instructor = session.createQuery(
+                             "from Instructor i " +
+                        "where i.username = :username", Instructor.class)
                     .setParameter("username", username)
                     .getSingleResult();
+
+            instructor.setPublishedExams(getExams(instructor));
+            return instructor;
+
         } catch (NoResultException exp) {
             return null;
         }
+    }
+
+    private List<Exam> getExams(Instructor instructor){
+        Session session = sessionFactory.getCurrentSession();
+
+        List<Exam> exams = session.createQuery(
+                "from Exam e " +
+                        "left join fetch e.attendances " +
+                        "where e.publisher = :instructor", Exam.class)
+                .setParameter("instructor", instructor)
+                .getResultList();
+
+        return exams;
     }
 
 }

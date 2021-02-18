@@ -22,6 +22,8 @@ public class ExamDto implements Serializable {
 
     private Date startDate;
 
+    private long publisherId;
+
     private List<Question> questions;
 
     private List<AttendanceDto> attendanceList;

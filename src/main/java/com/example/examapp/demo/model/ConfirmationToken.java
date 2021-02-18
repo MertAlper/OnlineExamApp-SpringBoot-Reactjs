@@ -31,7 +31,9 @@ public class ConfirmationToken {
     @Column(name = "ConfirmedAt")
     private LocalDateTime confirmedAt;
 
-    @ManyToOne
+    @OneToOne(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
     @JoinColumn(name = "ExamId")
     private Exam exam;
 
