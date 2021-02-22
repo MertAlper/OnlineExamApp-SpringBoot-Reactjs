@@ -11,6 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
 
 @EnableWebSecurity
 @Configuration
@@ -23,12 +27,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers( "/api/registration").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/exams/**").hasAuthority(ApplicationUserRole.INSTRUCTOR.name())
                 .antMatchers(HttpMethod.POST, "/api/exams/**").hasAuthority(ApplicationUserRole.INSTRUCTOR.name())
                 .antMatchers(HttpMethod.PUT, "/api/exams/**").hasAuthority(ApplicationUserRole.INSTRUCTOR.name())
                 .antMatchers(HttpMethod.DELETE, "/api/exams/**").hasAuthority(ApplicationUserRole.INSTRUCTOR.name())
+                .antMatchers(HttpMethod.GET, "/api/exams/**").hasAuthority(ApplicationUserRole.STUDENT.name())
                 .antMatchers(HttpMethod.POST, "/api/students/**").hasAuthority(ApplicationUserRole.STUDENT.name())
                 .antMatchers(HttpMethod.PUT, "/api/students/**").hasAuthority(ApplicationUserRole.STUDENT.name())
                 .antMatchers(HttpMethod.DELETE, "/api/students/**").hasAuthority(ApplicationUserRole.STUDENT.name())
@@ -52,5 +59,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers","Access-Control-Allow-Origin","Access-Control-Request-Method", "Access-Control-Request-Headers","Origin","Cache-Control", "Content-Type", "Authorization"));
+        configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }
 
