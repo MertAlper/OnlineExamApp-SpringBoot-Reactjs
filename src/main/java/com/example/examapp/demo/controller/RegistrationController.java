@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.Registration;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping(path = "/api/registration")
 public class RegistrationController {

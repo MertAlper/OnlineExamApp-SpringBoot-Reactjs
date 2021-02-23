@@ -6,8 +6,10 @@ import com.example.examapp.demo.dto.ExamDto;
 import com.example.examapp.demo.model.Attendance;
 import com.example.examapp.demo.model.ConfirmationToken;
 import com.example.examapp.demo.model.Exam;
+import com.example.examapp.demo.model.Instructor;
 import com.example.examapp.demo.service.ConfirmationTokenService;
 import com.example.examapp.demo.service.GenericService;
+import com.example.examapp.demo.service.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +19,21 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("/api/exams")
 public class ExamController {
 
     private final GenericService<Exam> examService;
     private final ConfirmationTokenService tokenService;
+    private  InstructorService instructorService;
 
     @Autowired
-    public ExamController(GenericService<Exam> genericService, ConfirmationTokenService tokenService){
+    public ExamController(GenericService<Exam> genericService, ConfirmationTokenService tokenService,
+                          InstructorService instructorService){
         examService = genericService;
         this.tokenService = tokenService;
+        this.instructorService=instructorService;
     }
 
     @PostMapping
@@ -45,7 +50,7 @@ public class ExamController {
 
         // Create a unique url for the new exam.
         String token = UUID.randomUUID().toString();
-        String link = "http://localhost:8080/examApp/api/students/confirm?token=" + token;
+        String link = "http://localhost:3000/ExamLogin/" + token;
 
         exam = examService.save(exam);
 
@@ -77,6 +82,17 @@ public class ExamController {
         ExamDto examDto=ExamDtoMapper.getExamDto(examToken.getExam());
 
         return examDto;
+    }
+
+    @GetMapping(path="/by/{username}")
+    public List<ExamDto> getExamsByPublisher(@PathVariable String username){
+        // TODO: Use HATEOAS for inner objects.
+        Instructor instructor = instructorService.getByUsername(username);
+        List<Exam> exams = instructorService.getPublishedExams(instructor);
+        List<ExamDto> examDtos = ExamDtoMapper.getExamDtos(exams);
+
+        return examDtos;
+
     }
 
     @PutMapping("/{examId}")

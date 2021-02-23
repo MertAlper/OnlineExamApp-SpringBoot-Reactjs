@@ -74,11 +74,11 @@ public class InstructorDaoImpl implements Dao<Instructor> {
         }
     }
 
-    private List<Exam> getExams(Instructor instructor){
+    public List<Exam> getExams(Instructor instructor){
         Session session = sessionFactory.getCurrentSession();
 
         List<Exam> exams = session.createQuery(
-                "from Exam e " +
+                " select distinct e from Exam e " +
                         "left join fetch e.attendances " +
                         "where e.publisher = :instructor", Exam.class)
                 .setParameter("instructor", instructor)

@@ -6,7 +6,6 @@ import com.example.examapp.demo.model.Instructor;
 import com.example.examapp.demo.service.InstructorService;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping(path = "/api/instructors")
 public class InstructorController {

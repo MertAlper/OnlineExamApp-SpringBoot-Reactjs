@@ -9,7 +9,6 @@ import com.example.examapp.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
 @RequestMapping("/api/students")
 @RestController
 public class StudentController {
