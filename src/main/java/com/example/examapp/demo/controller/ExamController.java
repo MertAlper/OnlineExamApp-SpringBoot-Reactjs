@@ -17,6 +17,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/exams")
 public class ExamController {
@@ -58,7 +59,7 @@ public class ExamController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("{examId}")
+    @GetMapping("/{examId}")
     public ExamDto getExam(@PathVariable("examId") long examId){
 
         // TODO: Use HATEOAS for inner objects.
@@ -69,7 +70,16 @@ public class ExamController {
         return examDto;
     }
 
-    @PutMapping("{examId}")
+    @GetMapping("/token:{token}")
+    public ExamDto getExamFromToken(@PathVariable("token") String token){
+        // TODO: Use HATEOAS for inner objects.
+        ConfirmationToken examToken= tokenService.getToken(token);
+        ExamDto examDto=ExamDtoMapper.getExamDto(examToken.getExam());
+
+        return examDto;
+    }
+
+    @PutMapping("/{examId}")
     public void updateExam(@PathVariable("examId") long examId, @RequestBody ExamDto examDto){
 
         Exam exam = examService.getById(examId);
