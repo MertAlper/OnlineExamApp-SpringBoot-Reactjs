@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# at first run, you must run on the command line "npm install" one time in order to install node module packages.
+
+# then  when you  want to start the application and node server, you must run "npm start" or "yarn start" on the command line always.
+
 ## Available Scripts
 
 In the project directory, you can run:
